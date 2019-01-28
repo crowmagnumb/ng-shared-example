@@ -28,7 +28,7 @@
                             {
                                 "glob": "**/*",
                                 "input": "projects/mytestlib/src/assets",
-                                "output": "/assets/mytestlib"
+                                "output": "/assets/myscope/mytestlib"
                             }
                         ],
                         "styles": ["src/styles.scss"],

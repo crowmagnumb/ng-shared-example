@@ -29,6 +29,22 @@ I like my libraries scoped so I edit the ```package.json``` file in ```projects/
     "name": "@myscope/mytestlib",
 ```
 
+#### Assets from library
+
+I also want to be able to use assets from a library in applications.
+
+To do this add something like the following to the assets section of angular.json. Unfortunately, I currently can only get this to work with sharing of web components. This does not seem to work for mobile apps. :(
+
+```
+,
+              {
+                "glob": "**/*",
+                "input": "node_modules/@myscope/mytestlib/assets",
+                "output": "/assets/myscope/mytestlib"
+              }
+```
+
+
 ### Test Web Component Library
 
 Now after some minor editing to make a simple example I made sure that this ran as a web component.
@@ -71,5 +87,32 @@ Then we add in our component from our library and test ...
 ng serve
 ```
 
+### Make shared library
 
+```
+cd test-lib
+ng add @nativescript/schematics
+./node_modules/.bin/update-ns-webpack --configs
+tns install typescript   <-- Not sure this is necessary. Try without?
+```
 
+This kind of makes a mess since it adds an ```"auto-generated"``` component and unnecessarily creates some tns specific files that it doesn't need to. I just delete the entire auto-generated directory and then cleanup anything that depends on it. In addition, it creates a ```app.component.tns.ts``` file that is unnecessary because the ```app.component.ts``` file is completely reusable here and actually kind of the point no? Anyway, I deleted that. Maybe I'll find some reason that I'll need it back to differentiate but I can add it back if so.
+
+Anyway, after some cleanup and making ```app.component.tns.html``` be the rough NativeScript equivalent of ```app.component.html``` we can see if this works by running.
+
+```
+tns preview --bundle
+```
+
+The --bundle is necessary here, it errors without it.
+
+**Wee! I have a sandbox phone app running on my phone!**
+
+### Make other application to be able to share between web and mobile
+
+```
+cd test-app
+ng add @nativescript/schematics
+./node_modules/.bin/update-ns-webpack --configs
+tns install typescript   <-- Not sure this is necessary. Try without?
+```
