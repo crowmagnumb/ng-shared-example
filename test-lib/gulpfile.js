@@ -31,7 +31,6 @@ function getLibInfo() {
 }
 
 gulp.task("build:ns", () => {
-    process.stderr.write("Testing...");
     let lib = getLibInfo();
     rimraf(lib.distDirNS, () => {
         copy(

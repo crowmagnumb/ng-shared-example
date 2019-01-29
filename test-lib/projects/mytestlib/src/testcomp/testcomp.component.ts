@@ -6,6 +6,8 @@ import { Component, OnInit } from "@angular/core";
     styles: []
 })
 export class MytestlibComponent implements OnInit {
+    title: string = "mytestlib will fix the world FOREVER!";
+
     constructor() {}
 
     ngOnInit() {}

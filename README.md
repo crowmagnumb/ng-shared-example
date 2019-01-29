@@ -76,7 +76,7 @@ gulp build --lib mytestlib
 npm publish dist/mytestlib
 ```
 
-**TODO**: Does anyone know how to make this web component available to another project locally without having to "publish" the component. ```npm link``` and **symlinks** never work from everything I have tried. I would love to not have to publish the next version of my library just to further test my library in an application external to the lib. Because the next time I publish Verdaccio requires me to bump the version of the library, it refuses to overwrite even though I know I'm the only one affected by the version bump. A little frustrating I have to admit. So I have to do ...
+The next time you publish Verdaccio requires you to bump the version of the library because it refuses to overwrite even though I know I'm the only one affected by the version bump.
 
 ```
 cd project/mytestlib
@@ -84,6 +84,13 @@ bump patch
 ```
 
 ...where bump is this utility ```"bump-version": "ianstormtaylor/bump",``` which I installed globally.
+
+But for everyday changes to libraries as you are testing it outside the scope of its playground you can "cheat" by not bumping the version number and instead copying the "dist" directory over the top of the one in your ```node_modules/@myscope/<lib>``` dir. An example of this script can be found in the gulpfile.js in the test-app. Run ...
+
+```
+cd test-app
+gulp updatelib --lib mytestlib
+```
 
 ### Make other application (or library) to use this library
 
