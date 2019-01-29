@@ -1,8 +1,14 @@
 {
-    "name": "@myscope/mytestlib",
-    "version": "0.0.1",
-    "peerDependencies": {
-        "@angular/common": "^7.0.0",
-        "@angular/core": "^7.0.0"
+  "name": "@myscope/mytestlib",
+  "version": "0.0.2",
+  "nativescript": {
+    "platforms": {
+      "android": "3.0.0",
+      "ios": "3.0.0"
     }
+  },
+  "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
+  }
 }

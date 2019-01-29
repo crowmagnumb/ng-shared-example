@@ -1,2 +1,8 @@
-<!-- https://docs.nativescript.org/angular/core-concepts/angular-navigation.html#page-router-outlet -->
+<StackLayout horizontalAlignment="center" style="text-align:center">
+    <label class="h1" [text]="'This is ' + title + '!'"></label>
+    <label
+        text="What should follow is my test component from test-lib."
+    ></label>
+    <testcomp></testcomp>
+</StackLayout>
 <page-router-outlet></page-router-outlet>
