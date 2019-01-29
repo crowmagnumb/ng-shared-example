@@ -2,6 +2,20 @@
 
 This is an attempt to bring together everything I have learned about creating shared libraries using Angular between the web and mobile devices using NativeScript. I hope to not only provide a resource for myself to consult, but also use as a test-bed for anything new that I might need to share as requirements change. But I also hope this is a resource that will help others to solve the same problems I have run into.
 
+## dev packages
+
+I'm assuming a number of things installed globally. At least ...
+
+- gulp
+- angular-cli
+- @nativescript/schematics
+
+
+```
+npm i rimraf --save-dev
+npm i recursive-copy --save-dev
+```
+
 ## Scaffolding
 
 The scaffolding of this example was created using the following commands.
@@ -58,7 +72,7 @@ ng serve
 Once that was working I could publish my library. I use [Verdaccio](https://verdaccio.org) for publishing my libraries privately. It's a little bit of work to set-up, but once you do you can completely forget about it and it just works flawlessly. Just make sure it's in your computer startup scripts so it's always running.
 
 ```
-ng build mytestlib
+gulp build --lib mytestlib
 npm publish dist/mytestlib
 ```
 

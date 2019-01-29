@@ -1,0 +1,12 @@
+{
+    "name": "@myscope/nativescript-mytestlib",
+    "version": "0.0.2",
+    "mainCOMMENT": "testplugin",
+    "typingsCOMMENT": "index.d.ts",
+    "nativescript": {
+        "platforms": {
+            "android": "5.0.0",
+            "ios": "5.0.0"
+        }
+    }
+}

@@ -1,27 +1,86 @@
 const gulp = require("gulp");
-const cp = require("child_process");
+const { spawn } = require("child_process");
 const path = require("path");
+const copy = require("recursive-copy");
+const fs = require("fs");
+const rimraf = require("rimraf");
 
 const DIST_DIR = "dist";
 
-function getLibName() {
+function getLibInfo() {
     let option,
         ii = process.argv.indexOf("--lib");
-    return ii > -1 ? process.argv[ii + 1] : null;
-}
-
-gulp.task("build", () => {
-    let libName = getLibName();
-    if (!libName) {
+    if (ii < 0 || process.argv.length < ii + 2) {
         throw new Error("lib not specified. e.g. gulp build <libName>");
     }
-    cp.execSync(`ng build ${libName}`, {
-        stdio: "inherit"
+    const name = process.argv[ii + 1];
+    const libDir = path.join("projects", name);
+    try {
+        fs.accessSync(libDir, fs.constants.R_OK);
+    } catch (err) {
+        process.stderr.write(err.toString());
+        throw new Error(`Library [${name}] does not appear to exist.`);
+    }
+    return {
+        name,
+        libDir,
+        srcDir: path.join(libDir, "src"),
+        distDir: path.join(DIST_DIR, name),
+        distDirNS: path.join(DIST_DIR, "nativescript-" + name)
+    };
+}
+
+gulp.task("build:ns", () => {
+    process.stderr.write("Testing...");
+    let lib = getLibInfo();
+    rimraf(lib.distDirNS, () => {
+        copy(
+            path.join(lib.srcDir),
+            path.join(lib.distDirNS),
+            (error, results) => {
+                if (error) {
+                    throw error;
+                }
+                process.stdout.write("Copied src.\n");
+                copy(
+                    path.join(lib.libDir, "package.tns.json"),
+                    path.join(lib.distDirNS, "package.json"),
+                    err => {
+                        if (err) {
+                            throw err;
+                        }
+                        process.stdout.write("Copied package.json.\n");
+                    }
+                );
+            }
+        );
     });
-    cp.execSync(
-        `cp -r ${path.join("projects", libName, "src")} ${path.join(
-            DIST_DIR,
-            libName
-        )}`
-    );
+});
+
+gulp.task("build", () => {
+    let lib = getLibInfo();
+    //
+    // Web version
+    //
+    const cmd = spawn("ng", ["build", lib.name]);
+    cmd.stdout.on("data", data => process.stdout.write(data.toString()));
+    cmd.stderr.on("data", data => process.stdout.write(data.toString()));
+    cmd.on("exit", code => {
+        if (code != 0) {
+            console.log(`Failed with code ${code}`);
+        }
+        copy(
+            path.join(lib.srcDir, "assets"),
+            path.join(lib.distDir, "assets"),
+            (error, results) => {
+                if (error) {
+                    process.stderr.write(error);
+                } else {
+                    process.stdout.write("Copied assets.\n");
+                }
+            }
+        );
+    });
+
+    return cmd;
 });
