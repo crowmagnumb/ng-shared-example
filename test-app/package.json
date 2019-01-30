@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
     "@myscope/mytestlib": "0.0.2",
+    "@myscope/nativescript-mytestlib": "0.0.2",
     "@nativescript/schematics": "^0.5.0",
     "core-js": "^2.5.4",
     "nativescript-angular": "~7.1.0",

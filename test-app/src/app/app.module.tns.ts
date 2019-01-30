@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 
-import { AUTestModule } from "@myscope/mytestlib";
+import { AUTestModule } from "@myscope/nativescript-mytestlib";
 
 import { AppRoutingModule } from "./app-routing.module.tns";
 import { AppComponent } from "./app.component";
