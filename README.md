@@ -24,12 +24,81 @@ Before building the lib you can verify that it works within the sandbox locally.
 ng serve
 ```
 
-For mobile, I typically use the awesome NativeScript Playground installed on my Android phone. So I just run ...
+For mobile, I typically use the freaking awesome NativeScript Playground installed on my Android phone so I can test it on an actual device! So I just run ...
 
 ```
 tns preview --bundle
 ```
-... but otherwise you can do 
+... but otherwise you can do ...
+
+```
+tns run <android | ios> --bundle
+```
+
+You **have** to use the ```--bundle``` option or you will get ...
+
+```
+An uncaught Exception occurred on "main" thread.
+java.lang.RuntimeException: Unable to create application com.tns.NativeScriptApplication: com.tns.NativeScriptException: Application entry point file not found. Please specify the file in package.json otherwise make sure the file index.js or bootstrap.js exists.\nIf using typescript make sure your entry point file is transpiled to javascript.
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5876)
+	at android.app.ActivityThread.access$1100(ActivityThread.java:199)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1650)
+	at android.os.Handler.dispatchMessage(Handler.java:106)
+	at android.os.Looper.loop(Looper.java:193)
+	at android.app.ActivityThread.main(ActivityThread.java:6669)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:858)
+Caused by: com.tns.NativeScriptException: Application entry point file not found. Please specify the file in package.json otherwise make sure the file index.js or bootstrap.js exists.\nIf using typescript make sure your entry point file is transpiled to javascript.
+	at com.tns.Module.bootstrapApp(Module.java:311)
+	at com.tns.Runtime.run(Runtime.java:544)
+	at com.tns.NativeScriptApplication.onCreate(NativeScriptApplication.java:21)
+	at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1154)
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5871)
+	... 8 more
+Caused by: com.tns.NativeScriptException: Failed to find module: "./", relative to: app//
+	at com.tns.Module.resolvePathHelper(Module.java:146)
+	at com.tns.Module.bootstrapApp(Module.java:309)
+	... 12 more
+```
+
+Now let's build the libraries. We need to build both the web and mobile versions of the libraries. The mobile version of the lib will be named ```nativescript-<libname>```, and for this test will be ```nativescript-mytestlib```. Let's build both of them.
+
+```
+gulp build --lib mytestlib
+gulp build:ns --lib mytestlib
+```
+
+Now let's see if we can get it working in a completely separate app. First, if you haven't done so already we need to do an initial npm install.
+
+```
+cd ../test-app
+npm i
+```
+
+Now let's update the libraries in our local node_modules directory. Ther is a gulp script for that. Let's run both...
+
+```
+gulp updatelib --lib mytestlib
+gulp updatelib --lib nativescript-mytestlib
+```
+
+Now just as before we can test the web and mobile versions of this app.
+
+```ng serve```
+
+... for the web and then for the mobile ...
+
+```
+tns preview --bundle
+```
+... or ...
+
+```
+tns run <android | ios> --bundle
+```
+
+Voila!!
 
 ## Scaffolding OR How I got here
 
