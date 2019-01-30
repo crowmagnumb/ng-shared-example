@@ -5,6 +5,8 @@ const copy = require("recursive-copy");
 const fs = require("fs");
 const rimraf = require("rimraf");
 
+const TMP_DIR = "tmp";
+const PROJECTS_DIR = "projects";
 const DIST_DIR = "dist";
 
 function getLibInfo() {
@@ -14,59 +16,26 @@ function getLibInfo() {
         throw new Error("lib not specified. e.g. gulp build <libName>");
     }
     const name = process.argv[ii + 1];
-    const libDir = path.join("projects", name);
+    const libDir = path.join(PROJECTS_DIR, name);
     try {
         fs.accessSync(libDir, fs.constants.R_OK);
     } catch (err) {
         process.stderr.write(err.toString());
         throw new Error(`Library [${name}] does not appear to exist.`);
     }
+    const nameNS = "nativescript-" + name;
     return {
         name,
+        nameNS,
         libDir,
         srcDir: path.join(libDir, "src"),
         distDir: path.join(DIST_DIR, name),
-        distDirNS: path.join(DIST_DIR, "nativescript-" + name)
+        distDirNS: path.join(DIST_DIR, nameNS)
     };
 }
 
-//
-// TODO: I think this would work if this was just a normal nativescript plugin but since
-// this is an angular nativescript plugin we have to do something else. I just don't
-// know what that is right now.
-//
-gulp.task("build:ns", () => {
-    let lib = getLibInfo();
-    rimraf(lib.distDirNS, () => {
-        copy(
-            path.join(lib.srcDir),
-            path.join(lib.distDirNS),
-            (error, results) => {
-                if (error) {
-                    throw error;
-                }
-                process.stdout.write("Copied src.\n");
-                copy(
-                    path.join(lib.libDir, "package.tns.json"),
-                    path.join(lib.distDirNS, "package.json"),
-                    err => {
-                        if (err) {
-                            throw err;
-                        }
-                        process.stdout.write("Copied package.json.\n");
-                    }
-                );
-            }
-        );
-    });
-});
-
-gulp.task("build", () => {
-    let lib = getLibInfo();
-    //
-    // Web version
-    //
-    const cmd = spawn("ng", ["build", lib.name]);
+function buildLibrary(name, srcDir, distDir) {
+    const cmd = spawn("ng", ["build", name]);
     cmd.stdout.on("data", data => process.stdout.write(data.toString()));
     cmd.stderr.on("data", data => process.stdout.write(data.toString()));
     cmd.on("exit", code => {
@@ -74,8 +43,8 @@ gulp.task("build", () => {
             console.log(`Failed with code ${code}`);
         }
         copy(
-            path.join(lib.srcDir, "assets"),
-            path.join(lib.distDir, "assets"),
+            path.join(srcDir, "assets"),
+            path.join(distDir, "assets"),
             (error, results) => {
                 if (error) {
                     process.stderr.write(error);
@@ -85,6 +54,47 @@ gulp.task("build", () => {
             }
         );
     });
-
     return cmd;
+}
+
+function walkSync(dir, fnc) {
+    fs.readdirSync(dir).forEach(filename => {
+        const fullpath = path.join(dir, filename);
+        if (fs.statSync(fullpath).isDirectory()) {
+            filelist = walkSync(fullpath, fnc);
+        } else {
+            fnc(fullpath);
+        }
+    });
+}
+
+gulp.task("build:ns", () => {
+    const lib = getLibInfo();
+    const tmpDir = path.join(TMP_DIR, lib.nameNS);
+
+    rimraf(tmpDir, () => {
+        copy(lib.libDir, tmpDir, (error, results) => {
+            if (error) {
+                throw error;
+            }
+            walkSync(tmpDir, file => {
+                if (file.endsWith(".tns.json")) {
+                    fs.renameSync(file, file.slice(0, -8) + "json");
+                } else if (file.endsWith(".tns.ts")) {
+                    fs.renameSync(file, file.slice(0, -6) + "ts");
+                } else if (file.endsWith(".tns.html")) {
+                    fs.renameSync(file, file.slice(0, -6) + "html");
+                }
+            });
+            buildLibrary(lib.nameNS, lib.srcDir, lib.distDirNS);
+        });
+    });
+});
+
+gulp.task("build", () => {
+    const lib = getLibInfo();
+    //
+    // Web version
+    //
+    return buildLibrary(lib.name, lib.srcDir, lib.distDir);
 });

@@ -129,6 +129,8 @@ The --bundle is necessary here, it errors without it.
 
 **Wee! I have a sandbox phone app running on my phone!**
 
+I have made a gulp script to build the nativescript plugin into an angular recognizable bundle. For each library in the project folder you will need to add a project to ```angular.json```. Simply copy the entry for "mytestlib" and paste it immediately afterward. First change the key for this entry from ```mytestlib``` to ```nativescript-mytestlib```. Now for every occurrence of ```projects/mytestlib``` in this new block of code replace it with ```tmp/nativescript-mytestlib```. The gulp script will first copy all the code from src into the tmp folder and replace all the *.* files with the *.tns.* files. (e.g. *.tns.html will overwrite *.html, *.tns.ts will overwrite *.ts, etc.). Now you can build this library with the command ```ng build nativescript-mytestlib``` but the gulp script does that for us.
+
 ### Make other application to be able to share between web and mobile
 
 ```

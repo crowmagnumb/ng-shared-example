@@ -160,6 +160,39 @@
                     }
                 }
             }
+        },
+        "nativescript-mytestlib": {
+            "root": "tmp/nativescript-mytestlib",
+            "sourceRoot": "tmp/nativescript-mytestlib/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "tmp/nativescript-mytestlib/tsconfig.lib.json",
+                        "project": "tmp/nativescript-mytestlib/ng-package.json"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "tmp/nativescript-mytestlib/src/test.ts",
+                        "tsConfig": "tmp/nativescript-mytestlib/tsconfig.spec.json",
+                        "karmaConfig": "tmp/nativescript-mytestlib/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tmp/nativescript-mytestlib/tsconfig.lib.json",
+                            "tmp/nativescript-mytestlib/tsconfig.spec.json"
+                        ],
+                        "exclude": ["**/node_modules/**"]
+                    }
+                }
+            }
         }
     },
     "defaultProject": "test-lib",
