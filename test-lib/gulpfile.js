@@ -30,6 +30,11 @@ function getLibInfo() {
     };
 }
 
+//
+// TODO: I think this would work if this was just a normal nativescript plugin but since
+// this is an angular nativescript plugin we have to do something else. I just don't
+// know what that is right now.
+//
 gulp.task("build:ns", () => {
     let lib = getLibInfo();
     rimraf(lib.distDirNS, () => {
