@@ -1,13 +1,10 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { MytestlibComponent } from "./testcomp/testcomp.component";
 
 @NgModule({
-    imports: [CommonModule, NativeScriptModule],
     declarations: [MytestlibComponent],
-    exports: [MytestlibComponent]
+    exports: [MytestlibComponent],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class AUTestModule {}

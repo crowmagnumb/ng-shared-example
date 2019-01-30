@@ -37,7 +37,7 @@ function getLibInfo() {
 function buildLibrary(name, srcDir, distDir) {
     const cmd = spawn("ng", ["build", name]);
     cmd.stdout.on("data", data => process.stdout.write(data.toString()));
-    cmd.stderr.on("data", data => process.stdout.write(data.toString()));
+    cmd.stderr.on("data", data => process.stderr.write(data.toString()));
     cmd.on("exit", code => {
         if (code != 0) {
             console.log(`Failed with code ${code}`);
@@ -47,7 +47,7 @@ function buildLibrary(name, srcDir, distDir) {
             path.join(distDir, "assets"),
             (error, results) => {
                 if (error) {
-                    process.stderr.write(error);
+                    throw error;
                 } else {
                     process.stdout.write("Copied assets.\n");
                 }

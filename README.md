@@ -2,23 +2,44 @@
 
 This is an attempt to bring together everything I have learned about creating shared libraries using Angular between the web and mobile devices using NativeScript. I hope to not only provide a resource for myself to consult, but also use as a test-bed for anything new that I might need to share as requirements change. But I also hope this is a resource that will help others to solve the same problems I have run into.
 
-## dev packages
-
-I'm assuming a number of things installed globally. At least ...
+This assumes a few things installed globally, at least, ...
 
 - gulp
+- NativeScript CLI
+
+## Run Examples
+
+You could just use a clone of this repo as some kind of starting point for your own or you could dig further and start from scratch using the rough outline below under **Scaffolding**. In reality, I have libraries that depend on other libraries, that depend on other libraries that are then used in final web and mobile applications. But this is a good starting point.
+
+So to see how it works for yourself do the following after cloning this repo.
+
+```
+cd test-lib
+npm i
+```
+
+Before building the lib you can verify that it works within the sandbox locally. For the web ...
+
+```
+ng serve
+```
+
+For mobile, I typically use the awesome NativeScript Playground installed on my Android phone. So I just run ...
+
+```
+tns preview --bundle
+```
+... but otherwise you can do 
+
+## Scaffolding OR How I got here
+
+The scaffolding of this example was created using the following commands. But I am absolutely sure this is NOT complete as I was doing/trying a whole bunch of stuff. I wrote down most of it I believe.
+
+This assumes a few other things installed globally, at least, ...
+
 - angular-cli
 - @nativescript/schematics
 
-
-```
-npm i rimraf --save-dev
-npm i recursive-copy --save-dev
-```
-
-## Scaffolding
-
-The scaffolding of this example was created using the following commands.
 
 ### Make Web Component Library
 I recommend you actually go through these steps rather than copy this template as a starting point so as to make sure you have all the latest changes necessary to angular, nativescript, ng-packagr, etc.
@@ -41,6 +62,11 @@ I like my libraries scoped so I edit the ```package.json``` file in ```projects/
 
 ```
     "name": "@myscope/mytestlib",
+```
+
+```
+npm i rimraf --save-dev
+npm i recursive-copy --save-dev
 ```
 
 #### Assets from library
@@ -131,11 +157,23 @@ The --bundle is necessary here, it errors without it.
 
 I have made a gulp script to build the nativescript plugin into an angular recognizable bundle. For each library in the project folder you will need to add a project to ```angular.json```. Simply copy the entry for "mytestlib" and paste it immediately afterward. First change the key for this entry from ```mytestlib``` to ```nativescript-mytestlib```. Now for every occurrence of ```projects/mytestlib``` in this new block of code replace it with ```tmp/nativescript-mytestlib```. The gulp script will first copy all the code from src into the tmp folder and replace all the *.* files with the *.tns.* files. (e.g. *.tns.html will overwrite *.html, *.tns.ts will overwrite *.ts, etc.). Now you can build this library with the command ```ng build nativescript-mytestlib``` but the gulp script does that for us.
 
+Originally, upon compiling, I had in issue that it was complaining about not knowing about the one-way binding attribute of [text] on the <Label> item. Googling revealed that I needed to set a schema to ignore those errors. Sucky, since we now won't catch valid errors until run-time BUT IT MAKES IT WORK! So make sure your module has the following in the schemas section...
+
+```
+    schemas: [NO_ERRORS_SCHEMA]
+```
+
+where NO_ERRORS_SCHEMA is imported from @angular-core ...
+
+```
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+```
+
 ### Make other application to be able to share between web and mobile
 
 ```
 cd test-app
 ng add @nativescript/schematics
-./node_modules/.bin/update-ns-webpack --configs
+./node_modules/.bin/update-ns-webpack --configs   <-- This only because the above complained and told me I should run this. Might be fixed by the time you try this.
 tns install typescript   <-- Not sure this is necessary. Try without?
 ```
