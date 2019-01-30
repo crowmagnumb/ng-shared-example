@@ -83,7 +83,7 @@ gulp.task("build:ns", () => {
                 } else if (file.endsWith(".tns.ts")) {
                     fs.renameSync(file, file.slice(0, -6) + "ts");
                 } else if (file.endsWith(".tns.html")) {
-                    fs.renameSync(file, file.slice(0, -6) + "html");
+                    fs.renameSync(file, file.slice(0, -8) + "html");
                 }
             });
             buildLibrary(lib.nameNS, lib.srcDir, lib.distDirNS);
