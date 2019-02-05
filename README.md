@@ -9,7 +9,18 @@ This assumes a few things installed globally, at least, ...
 
 ## Run Examples
 
-You could just use a clone of this repo as some kind of starting point for your own or you could dig further and start from scratch using the rough outline below under **Scaffolding**. In reality, I have libraries that depend on other libraries, that depend on other libraries that are then used in final web and mobile applications. But this is a good starting point.
+You could just use a clone of this repo as a starting point for your own or you could dig further and start from scratch using the rough outline below under **Scaffolding**.
+
+For the former, there is a script called ```copy_lib_scaffold``` that you can as follows...
+
+```
+cd test-lib
+./copy_lib_scaffold <your_lib_dir>
+```
+
+This will simply create the sandbox app. Then create (or copy) the project/lib directory here. Then edit the "project" entries in the angular.json file and change all occurrences of "mytestlib" to the name of your library under projects.
+
+In reality, I have libraries that depend on other libraries, that depend on other libraries that are then used in final web and mobile applications. But this is a good starting point.
 
 So to see how it works for yourself do the following after cloning this repo.
 

@@ -13,9 +13,9 @@ import { AUTestModule } from "../../projects/mytestlib/src/public_api";
 // import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 
 @NgModule({
-    declarations: [AppComponent],
     imports: [NativeScriptModule, AppRoutingModule, AUTestModule],
     providers: [],
+    declarations: [AppComponent],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA]
 })

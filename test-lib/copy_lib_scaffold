@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# ./copy_lib_scaffold <dest_dir>
+
+cp -r src $1
+cp .gitignore $1
+cp angular.json $1
+cp gulpfile.js $1
+cp nsconfig.json $1
+cp package.json $1
+cp tsconfig.json $1
+cp tsconfig.tns.json $1
+cp tslint.json $1
+cp webpack.config.js $1
