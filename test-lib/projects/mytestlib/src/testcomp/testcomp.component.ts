@@ -7,8 +7,13 @@ import { Component, OnInit } from "@angular/core";
 })
 export class MytestlibComponent implements OnInit {
     title: string = "mytestlib will fix the world FOREVER!";
+    buttonText: string = "Push Me";
 
     constructor() {}
 
     ngOnInit() {}
+
+    tapped() {
+        console.log("I've been tapped");
+    }
 }
