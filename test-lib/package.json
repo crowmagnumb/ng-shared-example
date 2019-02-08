@@ -64,6 +64,9 @@
         "id": "net.crowmagnumb.ngshared",
         "tns-android": {
             "version": "5.0.0"
+        },
+        "tns-ios": {
+            "version": "5.0.0"
         }
     }
 }

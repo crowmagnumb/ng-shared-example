@@ -1,18 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { AbstractMytestlibComponent } from "./testcomp.component.abstract";
 
-@Component({
-    selector: "testcomp",
-    templateUrl: "./testcomp.component.html",
-    styles: []
-})
-export class MytestlibComponent implements OnInit {
-    title: string = "mytestlib will fix the world FOREVER!";
-    buttonText: string = "Push Me";
-
-    constructor() {}
-
-    ngOnInit() {}
-
+export class MytestlibComponent extends AbstractMytestlibComponent {
     tapped() {
         console.log("I've been tapped");
     }
