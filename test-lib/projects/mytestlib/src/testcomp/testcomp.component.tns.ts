@@ -1,6 +1,12 @@
+import { Component } from "@angular/core";
+
 import { AbstractMytestlibComponent } from "./testcomp.component.abstract";
 import { alert } from "tns-core-modules/ui/dialogs";
 
+@Component({
+    selector: "testcomp",
+    templateUrl: "./testcomp.component.html"
+})
 export class MytestlibComponent extends AbstractMytestlibComponent {
     tapped() {
         let options = {
